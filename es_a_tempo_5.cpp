@@ -1,6 +1,6 @@
 #include<iostream>
 using namespace std;
-
+//commento
 
 void stampa(int*P,int m,int i)
 {
