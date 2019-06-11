@@ -62,7 +62,7 @@ bool partenza(bool*N, int m, int i, int*P){
 
 
    
-main()
+int main()
 {
   //ifstream in("input_es5t.txt");
   int m;
