@@ -54,6 +54,26 @@ nodo* clone(nodo*L)
   return new nodo(L->info,clone(L->next));
 }
 
+//PRE=(lista(L) è ben formata, A ha dimA >=0, elementi non negativi e crescenti e, se dimA>0, allora n<=A[0], 
+//vL=lista(L))
+nodo* distr_ric(nodo*&L, int*A, int dimA, int n){
+  if(!L || !dimA){
+    return NULL;
+  }
+  nodo* L1= 0;
+  if(*A==n){
+    L1=L;
+    L=L->next;
+    L1->next=distr_ric(L,A+1,dimA-1,n+1);
+  } else{
+    L1=distr_ric(L->next,A,dimA,n+1);
+  }
+  return L1;
+}
+//POST=(restituisce col return la lista L1 dei nodi di vL i cui indici, sommati a n, sono in A -nello stesso ordine 
+//relativo che avevano in vL -e L diventa L2, cioè la lista dei nodi di vL i cui indici sommati a n non sono in A 
+//-nello stesso ordine relativo che avevano in vL)
+
 main()
 {
   int  n,m;
@@ -66,10 +86,10 @@ main()
   cin>>m;
   int*A=new int[m];
   build_array(A,m);
-  nodo*y=distr_iter(L,A,m);
-  stampa_lista(y);
-  stampa_lista(L);
-  y=distr_ric(L1,A,m,0);
+  //nodo*y=distr_iter(L,A,m);
+  //stampa_lista(y);
+  //stampa_lista(L);
+  nodo*y=distr_ric(L1,A,m,0);
   stampa_lista(y);
   stampa_lista(L1);
   
