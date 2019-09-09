@@ -29,12 +29,26 @@ nodo* buildList(int n){
 }
 
 nodo* aux(nodo* &L, int x){
-    
+    if(!L){
+        return NULL;
+    }
+    if(L->info<x){
+        nodo* tmp= L;
+        L=NULL;
+        return tmp;
+    }
+    return aux(L->next,L->info);
 }
 
 //PRE = L lista ben formata
 nodoL* Gric(nodo* L){
-    
+    if(!L){
+        return NULL;
+    }
+    nodoL* tmp = new nodoL(L);
+    nodo* pros = aux(L,L->info);
+    tmp->next = Gric(pros);
+    return tmp;
 }
 //POST = restituisce lista concatenata LL di nodi di tipo nodoL con tanti nodi quanti sono
 //       i pezzi CeNA di L e tale che il primo nodo di LL ha campo p che punta al primo pezzo
