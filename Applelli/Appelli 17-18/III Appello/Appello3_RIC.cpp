@@ -34,20 +34,64 @@ void stampa(nodo*L)
     }
 }
 
-nodo* stacca(nodo*L, int k, nodo*& resto){
-
+nodo* conc(nodo*L, nodo*Ln){
+  if(!L){
+    return Ln;
+  }
+  if(!Ln){
+    return L;
+  }
+  Ln->next=conc(L,Ln->next);
+  return Ln;
 }
 
-nodo* conc(nodo*L, nodo*n){
+nodo* stacca(nodo*L, int k, nodo*& resto){
+  if(!k){
+    resto=L;
+    return NULL;
+  }
+  if(!L){
+    L=0;
+    resto=0;
+    return L;
+  }
+  if(k==1){//ultimo elemento da staccare
+    resto=L->next;
+    L->next=0;
+    return L;
+  }
 
+  L->next=stacca(L->next,k-1,resto);
+  return L;
 }
 
 /*PRE=(lista(L),lista(L1),e lista(L2) sono ben formate, A contiene dimA elementi non negativi, 
 con dimA pari>=0, vL=lista(L),vL1=lista(L1),vL2=lista(L2))    */
 void Fric(nodo*L, int * A, int dimA, nodo *&L1, nodo *& L2){
-
-
-
+  if(!L){
+    return;
+  }
+  if(!dimA){
+    L1=conc(L1,L);
+    return;
+  }
+  int n=0;
+  n=*A;
+  nodo* R=0;
+  nodo* nL=0;
+  nL=stacca(L,n,R);
+  L=R;
+  //L->next=0;
+  if(dimA%2==0){
+    L1=conc(nL,L1);
+  }
+  if(dimA%2!=0){
+    L2=conc(nL,L2);
+  }
+  Fric(L,A+1,dimA-1,L1,L2);
+  //stampa(L);
+  
+  
 }
 /*POST=(i  nodi  di  vL  sono  distribuiti  correttamente  su  2  
 liste  X1  e  X2  secondo  i  valori  di  A  e  L1=vL1@X1  e L2=vL2@X2) */
