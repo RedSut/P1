@@ -62,6 +62,35 @@ nodo*clone(nodo*L)
   if(!L) return 0;
   return new nodo(L->info,clone(L->next));
 }
+
+//PRE=(Lista(L) e Lista(D) sono corrette, vL=L)
+doppioN Fric(nodo* L, nodoD* D){
+  if(!L || !D){
+    return doppioN(L);
+  }
+  doppioN LL=0;
+  if(D->lascia!=0){
+    nodo* S=L;
+    L->next=0;
+    LL.La=L;
+    D->lascia--;
+    LL=Fric(L->next, D);
+    return LL;
+  }
+  if(D->togli!=0){
+    nodo* S1=L;
+    L->next=0;
+    LL.To=L;
+    D->togli--;
+    LL=Fric(L->next, D);
+    return LL;
+  }
+  LL=Fric(L,D->next);
+  return LL;
+} 
+//POST=(restituisce col return un valore struttura doppioN che è una coppia di valori nodo* che sono le liste lasciati e 
+//tolti(rispettivamente, nel campo La e To del valore doppioN) in cui viene smembrata vL secondo quanto prescritto da D)
+
 main()
 {
   int dimL, dimD;
@@ -72,10 +101,10 @@ main()
   cout<<"start"<<endl;
   stampaL(L); //data
   stampaD(D);//data
-  nodo* lasciati=0, *tolti=0;
-  Fiter(L,D, lasciati, tolti); //da fare
-  stampaL(lasciati);
-  stampaL(tolti);
+  //nodo* lasciati=0, *tolti=0;
+  //Fiter(L,D, lasciati, tolti); //da fare
+  //stampaL(lasciati);
+  //stampaL(tolti);
   doppioN y=Fric(L1,D); //da fare
   stampaL(y.La);
   stampaL(y.To);
