@@ -63,29 +63,49 @@ nodo*clone(nodo*L)
   return new nodo(L->info,clone(L->next));
 }
 
+//PRE=(Lista(L) è corretta, n>=0, vL=L)
+nodo* taglia_ric(nodo*& L,int n){
+  if(!L){
+    return NULL;
+  }
+  if(!n){
+    return NULL;
+  }
+  nodo* nL=L;
+  L=L->next;
+  if(n==1){
+    //nodo* nL=L->next;
+    nL->next=0;
+    return nL;
+  }
+  nL->next=taglia_ric(L,n-1);
+  return nL;
+}
+//POST=(la funzione restituisce col return i primi n nodi di vL se ci sono e altrimenti restituisce quello che c’è, 
+//L diventa quello che resta di vL una volta tolto il prefisso restituito col return)
+
+nodo* conc_ric(nodo* L1,nodo* L2){
+  if(!L1){
+    return L2;
+  }
+  if(!L2){
+    return L1;
+  }
+  L1->next=conc_ric(L1->next,L2);
+  return L1;
+}
+
 //PRE=(Lista(L) e Lista(D) sono corrette, vL=L)
 doppioN Fric(nodo* L, nodoD* D){
   if(!L || !D){
     return doppioN(L);
   }
   doppioN LL=0;
-  if(D->lascia!=0){
-    nodo* S=L;
-    L->next=0;
-    LL.La=L;
-    D->lascia--;
-    LL=Fric(L->next, D);
-    return LL;
-  }
-  if(D->togli!=0){
-    nodo* S1=L;
-    L->next=0;
-    LL.To=L;
-    D->togli--;
-    LL=Fric(L->next, D);
-    return LL;
-  }
+  nodo* Las=taglia_ric(L,D->lascia);
+  nodo* Tog=taglia_ric(L,D->togli);
   LL=Fric(L,D->next);
+  LL.La=conc_ric(Las,LL.La);
+  LL.To=conc_ric(Tog,LL.To);
   return LL;
 } 
 //POST=(restituisce col return un valore struttura doppioN che è una coppia di valori nodo* che sono le liste lasciati e 
