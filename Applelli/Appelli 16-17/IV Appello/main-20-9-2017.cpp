@@ -57,6 +57,65 @@ nodo* costruisci(int n, int dim)
     {return new nodo(a->num, a->info, clone(a->next));}
   return 0;
  }
+
+
+//PRE=(lista(L) corretta, vL=L) 
+FIFO eliminaR(nodo*& L, int x){
+  if(!L){
+    return 0;
+  }
+  FIFO F1=0;
+  F1=eliminaR(L->next,x);
+  if(L->info==x){
+    nodo* aux=L;
+    //F1.ultimo=L;
+    L=L->next;
+    F1=push_begin(F1,aux);
+    //F1.primo=L;
+    //return F1;
+  }
+  return F1;
+}
+//POST=(L è vL da cui sono stati eliminati tutti i nodi con info=x)&&(viene restituito un valore FIFO che gestisce la lista
+//dei nodi tolti nello stesso ordine che hanno in vL)
+
+//con PRE=(lista(Q) è corretta e ordinata rispetto ai campi info delle liste gestite dai suoi nodi,x gestisce lista non vuota) 
+nodoF* insR(nodoF* Q, FIFO x){
+  if(!Q){
+    return new nodoF(x,Q);
+  }
+  if(Q->info.primo->info<x.primo->info){
+    Q->next=insR(Q->next,x);
+  }else{
+    return new nodoF(x,Q);
+  }
+  return Q;
+}
+//POST=(restituisce Q a cui è stato aggiunto un nodoF che contiene x in modo da mantenere l’ordine dei campi info delle liste
+//gestite dai  suoi nodi)
+ 
+ 
+//PRE=(lista(L) è corretta, vL=L)
+nodoF* tieni_primo_ric(nodo*& L){
+  if(!L){
+    return NULL;
+  }
+  nodo* L1=L;
+  FIFO F=eliminaR(L->next,L->info);
+  /*cout<<"F"<<endl;
+  stampa_L(F.primo);
+  cout<<"L"<<endl;
+  stampa_L(L);*/
+  nodoF* N=tieni_primo_ric(L->next);
+  if(F.primo){
+    N=insR(N,F);
+  }
+  return N;
+}//POST=(L contiene tanti  nodi quanti sono i diversi campi info di vL e per ciascuncampo info di vL contiene esattamente il
+//primo nodo con quel valore di info)&&(la funzione restituisce col return una lista di nodi nodoF i cui nodi gestiscono i 
+//nodi ripetuti di vL nel modospiegato nell’esempio) 
+ 
+
 main()
 {
   int dim;
@@ -72,10 +131,10 @@ main()
   stampa_F(a);
   cout<<"lista rimanente:"<<endl;
   stampa_L(C);
-  nodoF* b=tieni_primo_iter(D); //da fare
+  /*nodoF* b=tieni_primo_iter(D); //da fare
   cout<<"soluzione iterativa"<<endl<<"nodi tolti:"<<endl;
   stampa_F(b);
   cout<<"lista rimanente:"<<endl;
-  stampa_L(D);
+  stampa_L(D);*/
   cout<<"end";
 }
