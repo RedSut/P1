@@ -53,8 +53,8 @@ int contan_ric(nodo*L) {
 int contaLiter(nodo *L){
     int i=0;
     while (!L){
-        i++;
         L=L->next;
+        i++;
     }
     return i;
 }
@@ -68,49 +68,41 @@ nodo* tagliaLiter(nodo*L, int N) {
 }
 
 nodoL* affettaiter(nodo*& L, int* A, int dimA){
-    /*if(!dimA){
-        //return nodoL;
-    }
-    if(!L){
-        if(*A==0){
-            //fetta a 0
-        }
-    }*/
-    nodoL* inizio=new nodoL(0);
+  nodoL* inizio=new nodoL(0);
 	nodoL* LL=inizio;
-    bool esci=false;
-    for(int i=1 ; i<=dimA && !esci ; i++){
-        int N=*A;
+  bool esci=false;
+    for(int i=0 ; i<dimA && (!esci) ; i++){
+        int N=A[i];
         int nL = contaLiter(L);
         if(N==0){
-            if(i==dimA || (A[i+1]>contaLiter(L))){
+            if(i==dimA-1 || (A[i+1]>contaLiter(L))){
                 LL->info=0; //Creo il nodo a 0
                 LL->next=0;
             }else{
                 LL->next=new nodoL(0); // LL punta all'ultimo nodo corrente, creo un nuovo nodo successivo vuoto
-				LL=LL->next;
+				        LL=LL->next;
             }
         }
         if(N!=0 && !L){
             esci=true;
         }
-        if(nL>=N){
+        if(nL>=N && N>0){
             nodo* aux = tagliaLiter(L,N);
             nodo* aux1 = L;
             L = aux->next; //Taglio L
             aux->next = 0; //pulisco aux
-            if(i!=dimA && A[i+1]<=contaLiter(L)){
-                LL->next=new nodoL(0);
+            if(i!=dimA-1 && A[i+1]<=contaLiter(L)){
+                LL->next = new nodoL(0);
                 LL->info = aux1;
                 LL=LL->next;
             }else{
                 LL->info = aux1;
             }
             if(A[i+1]>contaLiter(L)) {
-			    esci=true;
-			}
+			          esci=true;
+			      }
         }
-        if(nL<N){
+        if(nL<N && N>0){
             esci=true;
         }
     }
