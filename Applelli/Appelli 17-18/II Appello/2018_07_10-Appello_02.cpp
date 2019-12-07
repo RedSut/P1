@@ -54,6 +54,47 @@ nodo* clone(nodo*L)
   return new nodo(L->info,clone(L->next));
 }
 
+nodo* fine(nodo* L){
+  while(L->next){
+    L = L->next;
+  }
+  return L;
+}
+
+//PRE=(lista(L) è ben formata, A contiene dimA elementi non negativi e crescenti, dimA >0, vL=lista(L))
+nodo* distr_iter(nodo*& L, int* A, int dimA){
+  coda L1;
+  L1.primo=0;
+  L1.ultimo=0;
+  coda Lf;
+  Lf.primo = 0; //L
+  Lf.ultimo = 0; //fine(L);
+  int contL=0;
+  while(L){
+    int N = *A;
+    if(N==contL){
+      nodo* Lcp1=L;
+      L=L->next;
+      contL++;
+      L1 = push_end(L1,Lcp1);
+      if(dimA>1){
+        A=A+1;
+        dimA--;
+      }
+    }else if(N!=contL){
+      nodo* Lcp=L;
+      L = L->next;
+      contL++;
+      Lf = push_end(Lf,Lcp);
+    }  
+  }
+  L = Lf.primo;
+  return L1.primo;
+}
+//POST=(la funzione restituisce col return la lista L1 dei nodi di vL i cui indici sono in A -nello stessoordine relativo 
+//che avevano in vL -mentre L diventa L2, cioè la lista dei nodi di vL i cui indici non sono in A -nello stesso ordine 
+//relativo che avevano in vL)
+
 //PRE=(lista(L) è ben formata, A ha dimA >=0, elementi non negativi e crescenti e, se dimA>0, allora n<=A[0], 
 //vL=lista(L))
 nodo* distr_ric(nodo*&L, int*A, int dimA, int n){
@@ -82,15 +123,16 @@ main()
   nodo*L=build_list(n);
   nodo*L1=clone(L);
   stampa_lista(L);
-  
   cin>>m;
   int*A=new int[m];
   build_array(A,m);
-  //nodo*y=distr_iter(L,A,m);
-  //stampa_lista(y);
-  //stampa_lista(L);
-  nodo*y=distr_ric(L1,A,m,0);
+  cout<<"ITER:";
+  nodo*y=distr_iter(L,A,m);
   stampa_lista(y);
+  stampa_lista(L);
+  cout<<"RIC:";
+  nodo*z=distr_ric(L1,A,m,0);
+  stampa_lista(z);
   stampa_lista(L1);
   
   cout<<"end"<<endl;
